@@ -1,12 +1,19 @@
 package com.library.testClasses;
 
+import com.library.pojo.Api;
+import com.library.pojo.GetCourse;
+import com.library.pojo.WebAutomation;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.restassured.parsing.Parser;
 import io.restassured.path.json.JsonPath;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 
@@ -20,7 +27,7 @@ public class oAuthToken {
 
 
 
-          String code = getAccessCode();
+          /*String code = "4%2F0AX4XfWh8j_NluB7G6MIrO4LgcBxcWyXc5A4I5oWfafdDLvkFpFJCpUTg87vSwhAkGgKz7w";
 
 
         String accessTokenResponse = given().urlEncodingEnabled(false)
@@ -36,12 +43,44 @@ public class oAuthToken {
         JsonPath js = new JsonPath(accessTokenResponse);
         String accessToken = js.getString("access_token");
 
+        System.out.println("Access token: "+accessToken);*/
+
+
+        String accessToken = "ya29.a0ARrdaM-KmH7djhAYF5660DJWEXJLE3KKAZO-Y3Jd2yspC1_-xguwDz1rXwDsLeKvmcSSVfLEyRBn0DfpQxdQqKIaPuaRJFZqIA--xS2QiOislvbe0I7jJHxb2eJbvlhGGCKMVB7JF_zA1694jDhgBrLfzpRF-Q";
+
+      //get result as pojo object
+       GetCourse response =  given().queryParam("access_token",accessToken).expect().defaultParser(Parser.JSON)
+                .when().get("https://rahulshettyacademy.com/getCourse.php").as(GetCourse.class);
+
+        System.out.println("Instructor: "+response.getInstructor());
+        System.out.println("LinkedIn :"+response.getLinkedIn());
+
+        List<Api> apis = response.getCourses().getApi();
+        for (Api api:apis){
+            if(api.getCourseTitle().equalsIgnoreCase("SoapUI Webservices testing")){
+                System.out.println(api.getPrice());
+                break;
+            }
+        }
+
+        Optional<Api> soapUI_webservices_testing = apis.stream().filter(s -> s.getCourseTitle().equalsIgnoreCase("SoapUI Webservices testing")).findFirst();
+        System.out.println(soapUI_webservices_testing.get().getPrice());
+
+        //all course title print
+
+        List<WebAutomation> webAutomations = response.getCourses().getWebAutomation();
+
+        webAutomations.stream().forEach(s-> System.out.println(s.getCourseTitle()));
 
 
 
-       String response =  given().queryParam("access_token",accessToken)
-                .when().get("https://rahulshettyacademy.com/getCourse.php").then().extract().response().asString();
     }
+
+
+
+
+
+
 
 
     // Automation is blocked by google from automation framework
