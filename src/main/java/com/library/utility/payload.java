@@ -2,19 +2,23 @@ package com.library.utility;
 
 import org.openqa.selenium.json.Json;
 
+import java.util.HashMap;
+
 public class payload {
 
-    public static String addBookPayload(String isbn, String aisle){
+    public static HashMap<String, Object> addBookPayload(String isbn, String aisle){
 
-        String book = "{\n" +
-                "\n" +
-                "\"name\":\"Learn Appium Automation with Java\",\n" +
-                "\"isbn\":\""+isbn+"\",\n" +
-                "\"aisle\":\""+aisle+"\",\n" +
-                "\"author\":\"John foe\"\n" +
-                "}";
+        HashMap<String,Object> map = new HashMap<>();
 
-        return book;
+        map.put("name", "Test of hashmap json");
+        map.put("isbn",isbn);
+        map.put("aisle",aisle);
+        map.put("author","Sharif");
+
+
+
+
+        return map;
 
     }
     public static String deleteBookPayload(String isbn, String aisle){

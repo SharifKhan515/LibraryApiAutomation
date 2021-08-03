@@ -10,10 +10,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
@@ -67,19 +71,17 @@ public class oAuthToken {
         System.out.println(soapUI_webservices_testing.get().getPrice());
 
         //all course title print
+        String[] exp = {"Selenium Webdriver Java","Cypress","Protractor"};
 
         List<WebAutomation> webAutomations = response.getCourses().getWebAutomation();
 
-        webAutomations.stream().forEach(s-> System.out.println(s.getCourseTitle()));
+        List<String> title = webAutomations.stream().map(s -> s.getCourseTitle()).collect(Collectors.toList());
+        List<String> exptitle = Arrays.asList(exp);
 
+        Assert.assertTrue(exptitle.equals(title));
 
 
     }
-
-
-
-
-
 
 
 

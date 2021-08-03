@@ -7,6 +7,8 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+
 import static io.restassured.RestAssured.given;
 
 public class BookApi {
@@ -15,7 +17,7 @@ public class BookApi {
     public void addBookApi(String isbn, String aisle) {
 
         RestAssured.baseURI = "http://216.10.245.166";
-        String jsonPayload = payload.addBookPayload(isbn, aisle);
+        HashMap<String, Object> jsonPayload = payload.addBookPayload(isbn, aisle);
 
         String response = given().header("content-type", "application/json").body(jsonPayload)
                 .when().post("Library/Addbook.php").then().assertThat().statusCode(200).extract().response().asString();
